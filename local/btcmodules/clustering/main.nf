@@ -1,4 +1,4 @@
-process SEURAT_CLUSTERING {
+process SCBTC_CLUSTERING {
     tag "Clustering cells"
     label 'process_high'
 
@@ -11,7 +11,7 @@ process SEURAT_CLUSTERING {
     output:
         path("${params.project_name}_cluster_object_*.RDS"), emit: project_rds
         path("${params.project_name}_cluster_report.html")
-        path("figures/*")
+        path("figures/clustering/*")
         path("data/*")
 
     script:
@@ -26,22 +26,23 @@ process SEURAT_CLUSTERING {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
+                input_integration_method = "${input_integration_method}",
+                input_step_name = "${input_step_name}",
                 thr_resolution = ${params.thr_resolution},
-                workdir = here,
-                timestamp = "${workflow.runName}"
-
+                thr_proportion = ${params.thr_proportion},
+                workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_cluster_report.html"
+            output_file = "${params.project_name}_${input_step_name}_cluster_report.html"
             )           
 
         """
     stub:
         """
-        touch ${params.project_name}_cluster_report.html
-        touch ${params.project_name}_cluster_object_${workflow.runName}.RDS
+        touch ${params.project_name}_${input_step_name}_cluster_report.html
+        touch ${params.project_name}_${input_step_name}_cluster_object.RDS
 
-        mkdir -p figures
-        touch figures/EMPTY
+        mkdir -p figures/clustering
+        touch figures/clustering/EMPTY
         """
 }

@@ -1,4 +1,4 @@
-process SEURAT_FILTERING {
+process SCBTC_FILTERING {
     /* Description */
 
     tag "Applying QC on cells"
@@ -12,7 +12,7 @@ process SEURAT_FILTERING {
 
     output:
         tuple val(sample_id), path("objects/*"), path("log/*.txt"), emit: status
-        path("${sample_id}_metrics_upgrade*.csv"), emit: metrics
+        path("${sample_id}_metrics_upgrade.csv"), emit: metrics // EDITED
         path("${sample_id}_report.html")
         path("figures/*")
 
@@ -44,5 +44,13 @@ process SEURAT_FILTERING {
             output_dir = here,
             output_file = "${sample_id}_report.html")
         """
+    stub:
+        """
+        touch ${sample_id}_report.html
+        touch ${sample_id}_metrics_upgrade.csv
 
+        mkdir -p objects log figures
+        touch log/EMPTY.txt 
+        touch objects/EMPTY.txt
+        """
 }

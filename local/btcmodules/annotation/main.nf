@@ -1,4 +1,4 @@
-process SEURAT_ANNOTATION {
+process SCBTC_ANNOTATION {
     /* Description */
 
     tag "Cell annotation"
@@ -8,13 +8,13 @@ process SEURAT_ANNOTATION {
 
     input:
         path(project_object)
-        path(cluster_script)
+        path(annotation_script)
 
     output:
-        path("${params.project_name}_annotation_object_*.RDS"), emit: project_rds
+        path("${params.project_name}_annotation_object.RDS"), emit: project_rds
         path("${params.project_name}_annotation_report.html")
-        path("figures/*")
-        path("data/*")
+        path("figures/annotation/*")
+        path("data")
 
     script:
         """
@@ -24,26 +24,25 @@ process SEURAT_ANNOTATION {
         here <- getwd()
 
         # Rendering Rmarkdown script
-        rmarkdown::render("${cluster_script}",
+        rmarkdown::render("${annotation_script}",
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                thr_resolution = ${params.thr_resolution},
-                workdir = here,
-                timestamp = "${workflow.runName}"
-
+                input_cell_markers_db = "${params.input_cell_markers_db}"
+                input_annotation_level = "${params.input_annotation_level}"
+                workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_cluster_report.html"
+            output_file = "${params.project_name}_annotation_object_report.html"
             )           
 
         """
     stub:
         """
         touch ${params.project_name}_annotation_report.html
-        touch ${params.project_name}_annotation_object_${workflow.runName}.RDS
+        touch ${params.project_name}_annotation_object.RDS
 
-        mkdir -p figures
-        touch figures/EMPTY
+        mkdir -p data figures/annotation
+        touch figures/annotation/EMPTY
         """
 }

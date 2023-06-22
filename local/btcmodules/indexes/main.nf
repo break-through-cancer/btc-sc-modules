@@ -1,4 +1,4 @@
-process BTCMODULES_INDEX {
+process SCBTC_INDEX {
     
     tag "Retrieving ${genome}"
     label 'process_single'
@@ -11,7 +11,6 @@ process BTCMODULES_INDEX {
     output:
         path("indexes/${genome}"), emit: index
         path "versions.yml"      , emit: versions
-
 
     when:
         task.ext.when == null || task.ext.when
@@ -38,7 +37,5 @@ process BTCMODULES_INDEX {
         "${task.process}":
             btcmodules: ${genome} ${indexes[genome]}
         END_VERSIONS
-
-
         """
 }
