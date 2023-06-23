@@ -1,4 +1,4 @@
-process BTCMODULES_QC_RENDER {
+process SCBTC_QCRENDER {
     /* Description */
 
     tag "Rendering QC Table"
