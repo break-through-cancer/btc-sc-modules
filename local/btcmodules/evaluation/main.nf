@@ -7,12 +7,11 @@ process SCBTC_EVALUATION {
     input:
         path(project_object)
         path(evaluation_script)
-        val(input_target_variables)
-        val(input_step_name)
+        val(input_batch_step)
 
     output:
-        path("${params.project_name}_${input_step_name}_evaluation_object.RDS"), emit: project_rds
-        path("${params.project_name}_${input_step_name}_evaluation_report.html")
+        path("${params.project_name}_${input_batch_step}_evaluation_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_batch_step}_evaluation_report.html")
         path("figures/evaluation/*")
         path("data")
 
@@ -28,7 +27,7 @@ process SCBTC_EVALUATION {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_step_name = "${input_step_name}"
+                input_batch_step = "${input_batch_step}"
                 input_target_variables = "${params.input_target_variables}",
                 input_lisi_variables = "${params.input_lisi_variables}",
                 input_auto_selection = "${params.input_auto_selection}",
@@ -37,13 +36,13 @@ process SCBTC_EVALUATION {
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_evaluation_report.html")           
+            output_file = "${params.project_name}_${input_batch_step}_evaluation_report.html")           
 
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_evaluation_report.html
-        touch ${params.project_name}_${input_step_name}_evaluation_object.RDS
+        touch ${params.project_name}_${input_batch_step}_evaluation_report.html
+        touch ${params.project_name}_${input_batch_step}_evaluation_object.RDS
 
         mkdir -p data figures/evaluation
         touch figures/evaluation/EMPTY

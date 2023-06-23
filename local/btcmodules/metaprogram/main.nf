@@ -7,11 +7,11 @@ process SEURAT_META_PROGRAM {
     input:
         path(project_object)
         path(normalization_script)
-        val(input_step_name)
+        val(input_meta_step)
 
     output:
-        path("${params.project_name}_${input_step_name}_meta_object.RDS"), emit: project_rds
-        path("${params.project_name}_${input_step_name}_meta_report.html")
+        path("${params.project_name}_${input_meta_step}_meta_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_meta_step}_meta_report.html")
         path("figures/meta/*")
         path("data")
 
@@ -29,18 +29,18 @@ process SEURAT_META_PROGRAM {
                 input_meta_programs = "${params.input_meta_programs}",
                 input_cell_category = "${params.input_cell_category}",
                 input_heatmap_annotation = "${params.input_heatmap_annotation}",
-                input_step_name = "${input_step_name}",
+                input_meta_step = "${input_meta_step}",
                 n_threads = "${task.cpu}",
                 n_memory = "${task.memory}",
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_meta_report.html")
+            output_file = "${params.project_name}_${input_meta_step}_meta_report.html")
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_meta_report.html
-        touch ${params.project_name}_${input_step_name}_meta_object.RDS
+        touch ${params.project_name}_${input_meta_step}_meta_report.html
+        touch ${params.project_name}_${input_meta_step}_meta_object.RDS
 
         mkdir -p data figures/meta
         touch figures/meta/EMPTY

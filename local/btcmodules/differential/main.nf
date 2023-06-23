@@ -7,11 +7,11 @@ process SCBTC_DIFFERENTIAL {
     input:
         path(project_object)
         path(differential_script)
-        val(input_step_name)
+        val(input_deg_step)
 
     output:
-        path("${params.project_name}_${input_step_name}_deg_table.RDS"), emit: project_rds
-        path("${params.project_name}_${input_step_name}_deg_report.html")
+        path("${params.project_name}_${input_deg_step}_deg_table.RDS"), emit: project_rds
+        path("${params.project_name}_${input_deg_step}_deg_report.html")
         path("figures/deg/*")
         data("data")
 
@@ -28,7 +28,7 @@ process SCBTC_DIFFERENTIAL {
                 project_name = "${params.project_name}",
                 input_deg_method = "${params.input_deg_method}",
                 input_top_deg = "${params.input_top_deg}",
-                input_step_name = "${input_step_name}",
+                input_deg_step = "${input_deg_step}",
                 thr_n_features = "${params.thr_n_features}",
                 thr_fold_change = "${params.thr_fold_change}",
                 thr_min_percentage = "${params.thr_min_percentage}",
@@ -36,12 +36,12 @@ process SCBTC_DIFFERENTIAL {
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_deg_report.html")
+            output_file = "${params.project_name}_${input_deg_step}_deg_report.html")
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_deg_report.html
-        touch ${params.project_name}_${input_step_name}_deg_table.RDS
+        touch ${params.project_name}_${input_deg_step}_deg_report.html
+        touch ${params.project_name}_${input_deg_step}_deg_table.RDS
 
         mkdir -p data figures/deg
         touch figures/deg/EMPTY
