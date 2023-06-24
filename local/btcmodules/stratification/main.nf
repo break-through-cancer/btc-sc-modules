@@ -1,8 +1,11 @@
 process SCBTC_STRATIFICATION {
+    /* Description */
+
     tag "Running Cell Stratification"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -10,10 +13,9 @@ process SCBTC_STRATIFICATION {
         val(input_cancer_type)
 
     output:
-        path("${params.project_name}_*_stratification_object.RDS"), emit: project_rds
+        path("data/${params.project_name}*_stratification_object.RDS"), emit: project_rds
         path("${params.project_name}_stratification_report.html")
-        path("figures/stratification/*")
-        path("data")
+        path("figures/stratification")
 
     script:
         """
@@ -27,7 +29,7 @@ process SCBTC_STRATIFICATION {
             params = list(
                 project_name = "${params.project_name}",
                 input_step_name = "${input_step_name}",
-                input_cancer_type = "${params.cancer_type}",
+                input_cancer_type = "${input_cancer_type}",
                 input_stratification_method = "${params.input_stratification_method}",
                 thr_proportion = "${params.thr_proportion}",
                 thr_cluster_size: "${params.thr_cluster_size}",
@@ -38,16 +40,17 @@ process SCBTC_STRATIFICATION {
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_stratification_report.html")
+            output_file = "${params.project_name}_stratification_report.html")
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_stratification_report.html
-        touch ${params.project_name}_stratification_object.RDS
-        touch ${params.project_name}_Malignant_stratification_object.RDS
-        touch ${params.project_name}_nonMalignant_stratification_object.RDS
-
         mkdir -p data figures/stratification
+
+        touch data/${params.project_name}_stratification_object.RDS
+        touch data/${params.project_name}_Malignant_stratification_object.RDS
+        touch data/${params.project_name}_nonMalignant_stratification_object.RDS
+        touch ${params.project_name}_stratification_report.html
+
         touch figures/stratification/EMPTY
         """
 }

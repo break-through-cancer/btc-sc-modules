@@ -5,6 +5,7 @@ process SCBTC_FILTERING {
     label 'process_single'
 
     container 'oandrefonseca/scpackages:1.0'
+    publishDir "${params.project_name}/data/sample/${sample_id}", mode: 'copyNoFollow'
 
     input:
         tuple val(sample_id), path(matrices), path(csv_metrics), path(meta_data)
@@ -12,11 +13,12 @@ process SCBTC_FILTERING {
 
     output:
         tuple val(sample_id), path("objects/*"), path("log/*.txt"), emit: status
-        path("${sample_id}_metrics_upgrade.csv"), emit: metrics // EDITED
+        path("${sample_id}_metrics_upgrade.csv"), emit: metrics
         path("${sample_id}_report.html")
-        path("figures/*")
+        path("figures")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -39,6 +41,8 @@ process SCBTC_FILTERING {
                 thr_n_feature_rna_max = ${params.thr_n_feature_rna_max},
                 thr_percent_mito = ${params.thr_percent_mito},
                 thr_n_observed_cells = ${params.thr_n_observed_cells},
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,
@@ -50,7 +54,7 @@ process SCBTC_FILTERING {
         touch ${sample_id}_metrics_upgrade.csv
 
         mkdir -p objects log figures
-        touch log/EMPTY.txt 
-        touch objects/EMPTY.txt
+        touch log/SUCCESS.txt 
+        touch objects/${sample_id}.RDS
         """
 }

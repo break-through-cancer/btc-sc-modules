@@ -3,6 +3,7 @@ process CELLRANGER_COUNT {
     label 'process_medium'
 
     container "oandrefonseca/scaligners:1.0"
+    publishDir "${params.project_name}/data/sample", mode: 'copyNoFollow'
 
     input:
         tuple val(sample), path(reads)
@@ -39,7 +40,10 @@ process CELLRANGER_COUNT {
     stub:
         """
         mkdir -p ${sample}/outs/filtered_feature_bc_matrix
-        touch ${sample}/outs/filtered_feature_bc_matrix/barcodes.tsv.gz  features.tsv.gz  matrix.mtx.gz
+
+        touch ${sample}/outs/filtered_feature_bc_matrix/barcodes.tsv.gz  
+        touch ${sample}/outs/filtered_feature_bc_matrix/features.tsv.gz
+        touch ${sample}/outs/filtered_feature_bc_matrix/matrix.mtx.gz
         touch ${sample}/outs/metrics_summary.csv
         
         cat <<-END_VERSIONS > versions.yml

@@ -1,17 +1,18 @@
-process SCBTC_POSTQC {
+process SCBTC_MERGE {
     tag "Merging post-qc samples"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(ch_qc_approved)
         path(merge_script)
 
     output:
-        path("${params.project_name}_normalize_object.RDS"), emit: project_rds
-        path("${params.project_name}_normalize_report.html")
-        path("figures/*")
+        path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
+        path("data/${params.project_name}_merged_report.html")
+        path("figures/merge")
 
     script:
         """
@@ -28,14 +29,16 @@ process SCBTC_POSTQC {
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_normalize_report.html")
+            output_file = "${params.project_name}_merged_report.html")
         """
     stub:
         """
-        touch ${params.project_name}_merged_report.html
-        touch ${params.project_name}_merged_object.RDS
+        mkdir -p data figures/merge
 
-        mkdir -p figures/normalized
-        touch figures/normalized/EMPTY.pdf
+        touch data/${params.project_name}_merged_report.html
+        touch data/${params.project_name}_merged_object.RDS
+
+        touch figures/merge/EMPTY.pdf
+
         """
 }

@@ -1,8 +1,11 @@
 process SCBTC_EVALUATION {
+    /* Description */
+
     tag "Batch evaluation"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -12,7 +15,7 @@ process SCBTC_EVALUATION {
     output:
         path("${params.project_name}_${input_batch_step}_evaluation_object.RDS"), emit: project_rds
         path("${params.project_name}_${input_batch_step}_evaluation_report.html")
-        path("figures/evaluation/*")
+        path("figures/evaluation")
         path("data")
 
     script:

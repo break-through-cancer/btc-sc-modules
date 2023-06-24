@@ -1,4 +1,4 @@
-process SEURAT_NORMALIZATION {
+process SCBTC_NORMALIZATION {
     tag "Running normalization"
     label 'process_high'
 
@@ -12,8 +12,8 @@ process SEURAT_NORMALIZATION {
     output:
         path("${params.project_name}_${input_step_name}_normalize_object.RDS"), emit: project_rds
         path("${params.project_name}_${input_step_name}_normalize_report.html")
-        path("data")
         path("figures/*")
+        path("data")
 
     script:
         """

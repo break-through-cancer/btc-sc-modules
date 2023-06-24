@@ -3,6 +3,7 @@ process SCBTC_CLUSTERING {
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -10,10 +11,9 @@ process SCBTC_CLUSTERING {
         val(input_cluster_step)
 
     output:
-        path("${params.project_name}_cluster_object_*.RDS"), emit: project_rds
-        path("${params.project_name}_cluster_report.html")
-        path("figures/clustering/*")
-        path("data/*")
+        path("data/${params.project_name}_${input_cluster_step}_cluster_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_cluster_step}_cluster_report.html")
+        path("figures/clustering")
 
     script:
         """
@@ -40,10 +40,11 @@ process SCBTC_CLUSTERING {
         """
     stub:
         """
-        touch ${params.project_name}_${input_cluster_step}_cluster_report.html
-        touch ${params.project_name}_${input_cluster_step}_cluster_object.RDS
+        mkdir -p data figures/clustering
 
-        mkdir -p figures/clustering
+        touch data/${params.project_name}_${input_cluster_step}_cluster_object.RDS
+        touch ${params.project_name}_${input_cluster_step}_cluster_report.html
+        
         touch figures/clustering/EMPTY
         """
 }

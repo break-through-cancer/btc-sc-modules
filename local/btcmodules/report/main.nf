@@ -5,7 +5,8 @@ process SCBTC_QCRENDER {
     label 'process_single'
 
     container 'oandrefonseca/scpackages:1.0'
-    
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
+
     input:
         path(project_metrics)
         path(qc_table_script)
@@ -32,7 +33,7 @@ process SCBTC_QCRENDER {
         """
     stub:
         """
-            touch ${params.project_name}_project_metric_report.html
+        touch ${params.project_name}_project_metric_report.html
         """
 
 }

@@ -5,16 +5,16 @@ process SCBTC_ANNOTATION {
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
         path(annotation_script)
 
     output:
-        path("${params.project_name}_annotation_object.RDS"), emit: project_rds
+        path("data/${params.project_name}_annotation_object.RDS"), emit: project_rds
         path("${params.project_name}_annotation_report.html")
-        path("figures/annotation/*")
-        path("data")
+        path("figures/annotation")
 
     script:
         """
@@ -39,10 +39,11 @@ process SCBTC_ANNOTATION {
         """
     stub:
         """
-        touch ${params.project_name}_annotation_report.html
-        touch ${params.project_name}_annotation_object.RDS
-
         mkdir -p data figures/annotation
+        
+        touch data/${params.project_name}_annotation_object.RDS
+        touch ${params.project_name}_annotation_report.html
+
         touch figures/annotation/EMPTY
         """
 }

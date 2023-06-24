@@ -3,6 +3,7 @@ process CELLRANGER_MKGTF {
     label 'process_low'
 
     container "oandrefonseca/scaligners:1.0"
+    publishDir "${params.project_name}/indexes", mode: 'copyNoFollow'
 
     // Exit if running this module with -profile conda / -profile mamba
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
