@@ -3,6 +3,7 @@ process SCBTC_NORMALIZATION {
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -10,12 +11,12 @@ process SCBTC_NORMALIZATION {
         val(input_step_name)
 
     output:
-        path("${params.project_name}_${input_step_name}_normalize_object.RDS"), emit: project_rds
+        path("data/${params.project_name}_${input_step_name}_normalize_object.RDS"), emit: project_rds
         path("${params.project_name}_${input_step_name}_normalize_report.html")
-        path("figures/*")
-        path("data")
+        path("figures/reduction")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -28,6 +29,8 @@ process SCBTC_NORMALIZATION {
                 project_name = "${params.project_name}",
                 input_step_name = "${input_step_name}",
                 thr_n_features = "${params.thr_n_features}",
+                n_threads: "${task.cpu}",
+                n_memory: "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,
@@ -35,10 +38,11 @@ process SCBTC_NORMALIZATION {
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_normalize_report.html
-        touch ${params.project_name}_${input_step_name}_normalize_object.RDS
-
         mkdir -p data figures/reduction
+
+        touch data/${params.project_name}_${input_step_name}_normalize_object.RDS
+        touch ${params.project_name}_${input_step_name}_normalize_report.html
+
         touch figures/reduction/EMPTY
         """
 }

@@ -1,21 +1,22 @@
-process SEURAT_META_PROGRAM {
-    tag "Running normalization"
+process SCBTC_METAPROGRAM {
+    tag "Running meta-program analysis"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
-        path(normalization_script)
+        path(meta_script)
         val(input_meta_step)
 
     output:
-        path("${params.project_name}_${input_meta_step}_meta_object.RDS"), emit: project_rds
+        path("data/${params.project_name}_${input_meta_step}_meta_object.RDS"), emit: project_rds
         path("${params.project_name}_${input_meta_step}_meta_report.html")
-        path("figures/meta/*")
-        path("data")
+        path("figures/meta")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -23,7 +24,7 @@ process SEURAT_META_PROGRAM {
         here <- getwd()
 
         # Rendering Rmarkdown script
-        rmarkdown::render("${normalization_script}",
+        rmarkdown::render("${meta_script}",
             params = list(
                 project_name = "${params.project_name}",
                 input_meta_programs = "${params.input_meta_programs}",
@@ -31,7 +32,7 @@ process SEURAT_META_PROGRAM {
                 input_heatmap_annotation = "${params.input_heatmap_annotation}",
                 input_meta_step = "${input_meta_step}",
                 n_threads = "${task.cpu}",
-                n_memory = "${task.memory}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,
@@ -39,10 +40,11 @@ process SEURAT_META_PROGRAM {
         """
     stub:
         """
-        touch ${params.project_name}_${input_meta_step}_meta_report.html
-        touch ${params.project_name}_${input_meta_step}_meta_object.RDS
-
         mkdir -p data figures/meta
+
+        touch data/${params.project_name}_${input_meta_step}_meta_object.RDS
+        touch ${params.project_name}_${input_meta_step}_meta_report.html
+
         touch figures/meta/EMPTY
         """
 }

@@ -3,6 +3,7 @@ process SCBTC_DIFFERENTIAL {
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -10,13 +11,13 @@ process SCBTC_DIFFERENTIAL {
         val(input_deg_step)
 
     output:
-        path("${params.project_name}_${input_deg_step}_deg_table.RDS"), emit: project_rds
+        path("data/${params.project_name}_${input_deg_step}_deg_table.RDS"), emit: project_rds
         path("${params.project_name}_${input_deg_step}_deg_report.html")
-        path("figures/deg/*")
-        data("data")
+        path("figures/deg")
 
     script:
-        """
+       def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
+       """
         #!/usr/bin/env Rscript
 
         # Getting run work directory
@@ -33,6 +34,8 @@ process SCBTC_DIFFERENTIAL {
                 thr_fold_change = "${params.thr_fold_change}",
                 thr_min_percentage = "${params.thr_min_percentage}",
                 opt_hgv_filter = "${params.opt_hgv_filter}",
+                n_threads = "${task.cpu}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,
@@ -40,10 +43,11 @@ process SCBTC_DIFFERENTIAL {
         """
     stub:
         """
-        touch ${params.project_name}_${input_deg_step}_deg_report.html
-        touch ${params.project_name}_${input_deg_step}_deg_table.RDS
-
         mkdir -p data figures/deg
+
+        touch data/${params.project_name}_${input_deg_step}_deg_table.RDS
+        touch ${params.project_name}_${input_deg_step}_deg_report.html
+
         touch figures/deg/EMPTY
         """
 }

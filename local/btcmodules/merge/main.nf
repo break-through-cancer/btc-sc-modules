@@ -15,6 +15,7 @@ process SCBTC_MERGE {
         path("figures/merge")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -26,6 +27,8 @@ process SCBTC_MERGE {
             params = list(
                 project_name = "${params.project_name}",
                 input_qc_approved = "${ch_qc_approved.join(';')}",
+                n_threads = "${task.cpu}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,

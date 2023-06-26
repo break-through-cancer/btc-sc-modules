@@ -18,6 +18,7 @@ process SCBTC_STRATIFICATION {
         path("figures/stratification")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -36,7 +37,7 @@ process SCBTC_STRATIFICATION {
                 thr_consensus_score: "${params.thr_consensus_score}",
                 thr_n_features = "${params.thr_n_features}",
                 n_threads: "${task.cpu}",
-                n_memory: "${task.memory}",
+                n_memory: "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,

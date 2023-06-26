@@ -3,6 +3,7 @@ process SCBTC_DOUBLET {
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
@@ -10,12 +11,12 @@ process SCBTC_DOUBLET {
         val(input_step_name)
 
     output:
-        path("${params.project_name}_${input_step_name}_doublet_table.RDS"), emit: project_rds
+        path("data/${params.project_name}_${input_step_name}_doublet_table.RDS"), emit: project_rds
         path("${params.project_name}_${input_step_name}_doublet_report.html")
-        path("data")        
-        path("figures/doublet/*")
+        path("figures/doublet")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -27,6 +28,8 @@ process SCBTC_DOUBLET {
             params = list(
                 project_name = "${params.project_name}",
                 input_step_name = "${input_step_name}",
+                n_threads = "${task.cpu}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,
@@ -34,10 +37,11 @@ process SCBTC_DOUBLET {
         """
     stub:
         """
+        mkdir -p data figures/doublet
+        
+        touch data/${params.project_name}_${input_step_name}_doublet_table.RDS
         touch ${params.project_name}_${input_step_name}_doublet_report.html
-        touch ${params.project_name}_${input_step_name}_doublet_table.RDS
 
-        mkdir -p data figures/double
         touch figures/doublet/EMPTY
         """
 }

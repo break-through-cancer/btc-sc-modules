@@ -17,6 +17,7 @@ process SCBTC_ANNOTATION {
         path("figures/annotation")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -30,6 +31,8 @@ process SCBTC_ANNOTATION {
                 project_object = "${project_object}",
                 input_cell_markers_db = "${params.input_cell_markers_db}"
                 input_annotation_level = "${params.input_annotation_level}"
+                n_threads = "${task.cpu}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,

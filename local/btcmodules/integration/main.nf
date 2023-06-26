@@ -1,23 +1,22 @@
-process SCBTAC_INTEGRATION {
+process SCBTC_INTEGRATION {
     tag "Batch correction"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
+    publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
         path(project_object)
         path(batch_script)
-        val(input_target_variables)
         val(input_step_name)
 
     output:
-        path("${params.project_name}_batch_object.RDS"), emit: project_rds
-        path("${params.project_name}_batch_report.html")
-        path("figures/correction/*")
-        path("data")
+        path("data/${params.project_name}_${input_step_name}_batch_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_step_name}_batch_report.html")
+        path("figures/integration")
 
     script:
-        // I NEED A DEF HERE
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -33,7 +32,7 @@ process SCBTAC_INTEGRATION {
                 input_integration_method = "${params.input_integration_method}",
                 input_step_name = ${input_step_name},
                 n_threads = "${task.cpu}",
-                n_memory = "${task.memory}",
+                n_memory = "${n_memory}",
                 workdir = here,
             ), 
             output_dir = here,
@@ -42,10 +41,11 @@ process SCBTAC_INTEGRATION {
         """
     stub:
         """
-        touch ${params.project_name}_${input_step_name}_batch_report.html
-        touch ${params.project_name}_${input_step_name}_batch_object.RDS
+        mkdir -p data figures/integration
 
-        mkdir -p data figures/correction
-        touch figures/correction/EMPTY
+        touch data/${params.project_name}_${input_step_name}_batch_object.RDS
+        touch ${params.project_name}_${input_step_name}_batch_report.html
+
+        touch figures/integration/EMPTY
         """
 }

@@ -13,12 +13,13 @@ process SCBTC_EVALUATION {
         val(input_batch_step)
 
     output:
-        path("${params.project_name}_${input_batch_step}_evaluation_object.RDS"), emit: project_rds
+        path("data/${params.project_name}_${input_batch_step}_evaluation_table.RDS"), emit: project_rds
+        path("data/batch_method.selected.txt"), emit: best_method
         path("${params.project_name}_${input_batch_step}_evaluation_report.html")
         path("figures/evaluation")
-        path("data")
 
     script:
+        def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
         """
         #!/usr/bin/env Rscript
 
@@ -35,7 +36,7 @@ process SCBTC_EVALUATION {
                 input_lisi_variables = "${params.input_lisi_variables}",
                 input_auto_selection = "${params.input_auto_selection}",
                 n_threads = "${task.cpu}",
-                n_memory = "${task.memory}",
+                n_memory = "${n_memory}",
                 workdir = here
             ), 
             output_dir = here,
@@ -44,10 +45,12 @@ process SCBTC_EVALUATION {
         """
     stub:
         """
-        touch ${params.project_name}_${input_batch_step}_evaluation_report.html
-        touch ${params.project_name}_${input_batch_step}_evaluation_object.RDS
-
         mkdir -p data figures/evaluation
+
+        touch data/${params.project_name}_${input_batch_step}_evaluation_table.RDS
+        touch data/batch_method.selected.txt
+        touch ${params.project_name}_${input_batch_step}_evaluation_report.html
+
         touch figures/evaluation/EMPTY
         """
 }
