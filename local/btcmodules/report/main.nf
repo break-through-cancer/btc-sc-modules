@@ -27,8 +27,8 @@ process SCBTC_QCRENDER {
             params = list(
                 project_name = "${params.project_name}",
                 input_metrics_report = "${project_metrics.join(';')}",
-                n_threads: "${task.cpu}",
-                n_memory: "${n_memory}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,

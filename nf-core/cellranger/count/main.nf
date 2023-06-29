@@ -1,6 +1,6 @@
 process CELLRANGER_COUNT {
     tag "${sample}"
-    label 'process_medium'
+    label 'process_high'
 
     container "oandrefonseca/scaligners:1.0"
     publishDir "${params.project_name}/data/sample", mode: 'copyNoFollow'
@@ -22,14 +22,13 @@ process CELLRANGER_COUNT {
         """
             cellranger \\
                 count \\
-                --id='${sample}' \\
+                --id="${sample}" \\
                 --fastqs=. \\
-                --transcriptome=${reference_name} \\
-                --sample=${sample} \\
+                --transcriptome="${reference_name}" \\
+                --sample="${sample}" \\
                 --include-introns=false \\
                 --localcores=${task.cpus} \\
-                --localmem=${task.memory.toGiga()} \\
-                $args
+                --localmem=${task.memory.toGiga()}
 
             cat <<-END_VERSIONS > versions.yml
             "${task.process}":

@@ -1,5 +1,5 @@
 process SCBTC_CLUSTERING {
-    tag "Clustering cells"
+    tag "Clustering ${input_cluster_step} cells"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
@@ -28,12 +28,12 @@ process SCBTC_CLUSTERING {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_integration_method = "${input_integration_method}",
+                input_integration_dimension = "auto",
                 input_cluster_step = "${input_cluster_step}",
                 thr_resolution = ${params.thr_resolution},
                 thr_proportion = ${params.thr_proportion},
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,

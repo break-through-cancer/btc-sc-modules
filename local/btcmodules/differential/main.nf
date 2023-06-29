@@ -1,5 +1,5 @@
 process SCBTC_DIFFERENTIAL {
-    tag "Running DEG Analysis"
+    tag "Running ${input_deg_step} DEG Analysis"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
@@ -27,15 +27,16 @@ process SCBTC_DIFFERENTIAL {
         rmarkdown::render("${differential_script}",
             params = list(
                 project_name = "${params.project_name}",
+                project_object = "${project_object}",
                 input_deg_method = "${params.input_deg_method}",
                 input_top_deg = "${params.input_top_deg}",
                 input_deg_step = "${input_deg_step}",
-                thr_n_features = "${params.thr_n_features}",
-                thr_fold_change = "${params.thr_fold_change}",
-                thr_min_percentage = "${params.thr_min_percentage}",
-                opt_hgv_filter = "${params.opt_hgv_filter}",
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                thr_n_features = ${params.thr_n_features},
+                thr_fold_change = ${params.thr_fold_change},
+                thr_min_percentage = ${params.thr_min_percentage},
+                opt_hgv_filter = "${params.opt_hgv_filter},
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,

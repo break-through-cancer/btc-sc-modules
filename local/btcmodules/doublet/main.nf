@@ -1,5 +1,5 @@
 process SCBTC_DOUBLET {
-    tag "Running doublet detection"
+    tag "Running ${input_doublet_name} doublet detection"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
@@ -8,11 +8,11 @@ process SCBTC_DOUBLET {
     input:
         path(project_object)
         path(doublet_script)
-        val(input_step_name)
+        val(input_doublet_name)
 
     output:
-        path("data/${params.project_name}_${input_step_name}_doublet_table.RDS"), emit: project_rds
-        path("${params.project_name}_${input_step_name}_doublet_report.html")
+        path("data/${params.project_name}_${input_doublet_name}_doublet_table.RDS"), emit: project_rds
+        path("${params.project_name}_${input_doublet_name}_doublet_report.html")
         path("figures/doublet")
 
     script:
@@ -27,20 +27,21 @@ process SCBTC_DOUBLET {
         rmarkdown::render("${doublet_script}",
             params = list(
                 project_name = "${params.project_name}",
-                input_step_name = "${input_step_name}",
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                project_object = "${project_object}",
+                input_doublet_name = "${input_doublet_name}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_doublet_report.html")
+            output_file = "${params.project_name}_${input_doublet_name}_doublet_report.html")
         """
     stub:
         """
         mkdir -p data figures/doublet
         
-        touch data/${params.project_name}_${input_step_name}_doublet_table.RDS
-        touch ${params.project_name}_${input_step_name}_doublet_report.html
+        touch data/${params.project_name}_${input_doublet_name}_doublet_table.RDS
+        touch ${params.project_name}_${input_doublet_name}_doublet_report.html
 
         touch figures/doublet/EMPTY
         """

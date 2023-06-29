@@ -11,7 +11,7 @@ process SCBTC_MERGE {
 
     output:
         path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
-        path("data/${params.project_name}_merged_report.html")
+        path("${params.project_name}_merged_report.html")
         path("figures/merge")
 
     script:
@@ -27,8 +27,8 @@ process SCBTC_MERGE {
             params = list(
                 project_name = "${params.project_name}",
                 input_qc_approved = "${ch_qc_approved.join(';')}",
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,
@@ -38,8 +38,8 @@ process SCBTC_MERGE {
         """
         mkdir -p data figures/merge
 
-        touch data/${params.project_name}_merged_report.html
         touch data/${params.project_name}_merged_object.RDS
+        touch ${params.project_name}_merged_report.html
 
         touch figures/merge/EMPTY.pdf
 

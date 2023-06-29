@@ -29,14 +29,14 @@ process SCBTC_ANNOTATION {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_cell_markers_db = "${params.input_cell_markers_db}"
-                input_annotation_level = "${params.input_annotation_level}"
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                input_cell_markers_db = "${params.input_cell_markers_db}",
+                input_annotation_level = "${params.input_annotation_level}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_annotation_object_report.html"
+            output_file = "${params.project_name}_annotation_report.html"
             )           
 
         """

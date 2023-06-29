@@ -27,12 +27,13 @@ process SCBTC_METAPROGRAM {
         rmarkdown::render("${meta_script}",
             params = list(
                 project_name = "${params.project_name}",
+                project_object = "${project_object}",
                 input_meta_programs = "${params.input_meta_programs}",
                 input_cell_category = "${params.input_cell_category}",
                 input_heatmap_annotation = "${params.input_heatmap_annotation}",
                 input_meta_step = "${input_meta_step}",
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,

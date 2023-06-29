@@ -31,12 +31,12 @@ process SCBTC_EVALUATION {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_batch_step = "${input_batch_step}"
+                input_batch_step = "${input_batch_step}",
                 input_target_variables = "${params.input_target_variables}",
                 input_lisi_variables = "${params.input_lisi_variables}",
                 input_auto_selection = "${params.input_auto_selection}",
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,

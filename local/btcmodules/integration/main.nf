@@ -8,11 +8,11 @@ process SCBTC_INTEGRATION {
     input:
         path(project_object)
         path(batch_script)
-        val(input_step_name)
+        val(input_batch_step)
 
     output:
-        path("data/${params.project_name}_${input_step_name}_batch_object.RDS"), emit: project_rds
-        path("${params.project_name}_${input_step_name}_batch_report.html")
+        path("data/${params.project_name}_${input_batch_step}_batch_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_batch_step}_batch_report.html")
         path("figures/integration")
 
     script:
@@ -30,21 +30,21 @@ process SCBTC_INTEGRATION {
                 project_object = "${project_object}",
                 input_target_variables = "${params.input_target_variables}",
                 input_integration_method = "${params.input_integration_method}",
-                input_step_name = ${input_step_name},
-                n_threads = "${task.cpu}",
-                n_memory = "${n_memory}",
-                workdir = here,
+                input_batch_step = "${input_batch_step}",
+                n_threads = ${task.cpus},
+                n_memory = ${n_memory},
+                workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_step_name}_batch_report.html")           
+            output_file = "${params.project_name}_${input_batch_step}_batch_report.html")           
 
         """
     stub:
         """
         mkdir -p data figures/integration
 
-        touch data/${params.project_name}_${input_step_name}_batch_object.RDS
-        touch ${params.project_name}_${input_step_name}_batch_report.html
+        touch data/${params.project_name}_${input_batch_step}_batch_object.RDS
+        touch ${params.project_name}_${input_batch_step}_batch_report.html
 
         touch figures/integration/EMPTY
         """
