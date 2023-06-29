@@ -13,9 +13,9 @@ process SCBTC_EVALUATION {
         val(input_batch_step)
 
     output:
-        path("data/${params.project_name}_${input_batch_step}_evaluation_table.RDS"), emit: project_rds
         path("data/batch_method.selected.txt"), emit: best_method
-        path("${params.project_name}_${input_batch_step}_evaluation_report.html")
+        path("data/${params.project_name}_evaluation_table.RDS")
+        path("${params.project_name}_evaluation_report.html")
         path("figures/evaluation")
 
     script:
@@ -40,16 +40,16 @@ process SCBTC_EVALUATION {
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_batch_step}_evaluation_report.html")           
+            output_file = "${params.project_name}_evaluation_report.html")           
 
         """
     stub:
         """
         mkdir -p data figures/evaluation
 
-        touch data/${params.project_name}_${input_batch_step}_evaluation_table.RDS
+        touch data/${params.project_name}_evaluation_table.RDS
         touch data/batch_method.selected.txt
-        touch ${params.project_name}_${input_batch_step}_evaluation_report.html
+        touch ${params.project_name}_evaluation_report.html
 
         touch figures/evaluation/EMPTY
         """

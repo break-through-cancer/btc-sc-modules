@@ -18,6 +18,7 @@ process SCBTC_ANNOTATION {
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
+        def pipeline_directory = workflow.projectDir.toString().trim()
         """
         #!/usr/bin/env Rscript
 
@@ -29,7 +30,7 @@ process SCBTC_ANNOTATION {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_cell_markers_db = "${params.input_cell_markers_db}",
+                input_cell_markers_db = "${pipeline_directory}/${params.input_cell_markers_db}",
                 input_annotation_level = "${params.input_annotation_level}",
                 n_threads = ${task.cpus},
                 n_memory = ${n_memory},

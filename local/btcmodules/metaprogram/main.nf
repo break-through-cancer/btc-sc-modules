@@ -17,6 +17,7 @@ process SCBTC_METAPROGRAM {
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
+        def pipeline_directory = workflow.projectDir.toString().trim()
         """
         #!/usr/bin/env Rscript
 
@@ -28,7 +29,7 @@ process SCBTC_METAPROGRAM {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_meta_programs = "${params.input_meta_programs}",
+                input_meta_programs = "${pipeline_directory}/${params.input_meta_programs_db}",
                 input_cell_category = "${params.input_cell_category}",
                 input_heatmap_annotation = "${params.input_heatmap_annotation}",
                 input_meta_step = "${input_meta_step}",
