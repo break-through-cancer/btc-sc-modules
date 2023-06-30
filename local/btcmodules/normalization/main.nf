@@ -1,5 +1,5 @@
 process SCBTC_NORMALIZATION {
-    tag "Running ${input_reduction_name} normalization"
+    tag "Running ${input_reduction_step} normalization"
     label 'process_high'
 
     container "oandrefonseca/scpackages:1.0"
@@ -8,11 +8,11 @@ process SCBTC_NORMALIZATION {
     input:
         path(project_object)
         path(normalization_script)
-        val(input_reduction_name)
+        val(input_reduction_step)
 
     output:
-        path("data/${params.project_name}_${input_reduction_name}_reduction_object.RDS"), emit: project_rds
-        path("${params.project_name}_${input_reduction_name}_reduction_object.html")
+        path("data/${params.project_name}_${input_reduction_step}_reduction_object.RDS"), emit: project_rds
+        path("${params.project_name}_${input_reduction_step}_reduction_object.html")
         path("figures/reduction")
 
     script:
@@ -28,21 +28,21 @@ process SCBTC_NORMALIZATION {
             params = list(
                 project_name = "${params.project_name}",
                 project_object = "${project_object}",
-                input_reduction_name = "${input_reduction_name}",
+                input_reduction_step = "${input_reduction_step}",
                 thr_n_features = ${params.thr_n_features},
                 n_threads = ${task.cpus},
                 n_memory = ${n_memory},
                 workdir = here
             ), 
             output_dir = here,
-            output_file = "${params.project_name}_${input_reduction_name}_reduction_object.html")
+            output_file = "${params.project_name}_${input_reduction_step}_reduction_object.html")
         """
     stub:
         """
         mkdir -p data figures/reduction
 
-        touch data/${params.project_name}_${input_reduction_name}_reduction_object.RDS
-        touch ${params.project_name}_${input_reduction_name}_reduction_object.html
+        touch data/${params.project_name}_${input_reduction_step}_reduction_object.RDS
+        touch ${params.project_name}_${input_reduction_step}_reduction_object.html
 
         touch figures/reduction/EMPTY
         """
