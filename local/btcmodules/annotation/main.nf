@@ -4,7 +4,7 @@ process SCBTC_ANNOTATION {
     tag "Cell annotation"
     label 'process_high'
 
-    container "oandrefonseca/scpackages:1.0"
+    container "oandrefonseca/scrpackages:1.0"
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:

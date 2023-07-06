@@ -4,7 +4,7 @@ process SCBTC_QCRENDER {
     tag "Rendering QC Table"
     label 'process_single'
 
-    container 'oandrefonseca/scpackages:1.0'
+    container 'oandrefonseca/scrpackages:1.0'
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:

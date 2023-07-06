@@ -2,7 +2,7 @@ process SCBTC_DOUBLET {
     tag "Running ${input_doublet_name} doublet detection"
     label 'process_high'
 
-    container "oandrefonseca/scpackages:1.0"
+    container "oandrefonseca/scrpackages:1.0"
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
