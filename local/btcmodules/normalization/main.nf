@@ -2,7 +2,7 @@ process SCBTC_NORMALIZATION {
     tag "Running ${input_reduction_step} normalization"
     label 'process_high'
 
-    container "oandrefonseca/scrpackages:1.0"
+    container "oandrefonseca/scrpackages:main"
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:

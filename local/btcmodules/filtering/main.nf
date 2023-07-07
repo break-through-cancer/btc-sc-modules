@@ -4,7 +4,7 @@ process SCBTC_FILTERING {
     tag "Applying QC on cells"
     label 'process_single'
 
-    container 'oandrefonseca/scrpackages:1.0'
+    container 'oandrefonseca/scrpackages:main'
     publishDir "${params.project_name}/data/sample/${sample_id}", mode: 'copyNoFollow'
 
     input:

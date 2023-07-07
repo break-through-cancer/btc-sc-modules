@@ -3,7 +3,7 @@ process SCBTC_INDEX {
     tag "Retrieving ${genome}"
     label 'process_single'
 
-    container "oandrefonseca/scaligners:1.0"
+    container "oandrefonseca/scaligners:main"
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:

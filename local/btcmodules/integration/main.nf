@@ -2,7 +2,7 @@ process SCBTC_INTEGRATION {
     tag "Batch correction"
     label 'process_high'
 
-    container "oandrefonseca/scrpackages:1.0"
+    container "oandrefonseca/scrpackages:main"
     publishDir "${params.project_name}", mode: 'copyNoFollow'
 
     input:
