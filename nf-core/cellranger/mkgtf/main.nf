@@ -2,7 +2,7 @@ process CELLRANGER_MKGTF {
     tag "$gtf"
     label 'process_low'
 
-    container "oandrefonseca/scaligners:1.0"
+    container "oandrefonseca/scaligners:main"
     publishDir "${params.project_name}/indexes", mode: 'copyNoFollow'
 
     // Exit if running this module with -profile conda / -profile mamba
