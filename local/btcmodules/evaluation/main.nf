@@ -5,7 +5,7 @@ process SCBTC_EVALUATION {
     label 'process_high'
 
     container "oandrefonseca/scrpackages:main"
-    publishDir "${params.project_name}", mode: 'copyNoFollow'
+    publishDir "${params.project_name}", mode: 'copy'
 
     input:
         path(project_object)
