@@ -3,7 +3,7 @@ process CELLRANGER_COUNT {
     label 'process_medium'
 
     container "oandrefonseca/scaligners:main"
-    publishDir "${params.project_name}/data/sample", mode: 'copyNoFollow'
+    publishDir "${params.project_name}/data/sample", mode: 'copy'
 
     input:
         tuple val(sample), path(reads)
