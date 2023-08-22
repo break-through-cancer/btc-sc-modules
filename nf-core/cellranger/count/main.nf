@@ -26,7 +26,6 @@ process CELLRANGER_COUNT {
                 --fastqs=. \\
                 --transcriptome="${reference_name}" \\
                 --sample="${sample}" \\
-                --include-introns=false \\
                 --localcores=${task.cpus} \\
                 --localmem=${task.memory.toGiga()}
 
