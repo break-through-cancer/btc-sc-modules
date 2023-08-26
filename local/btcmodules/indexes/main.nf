@@ -4,7 +4,7 @@ process SCBTC_INDEX {
     label 'process_single'
 
     container "oandrefonseca/scaligners:main"
-    publishDir "${params.project_name}", mode: 'copy'
+    publishDir "${params.outdir}", mode: 'copy'
 
     input:
         val(genome) // variable: GENOME

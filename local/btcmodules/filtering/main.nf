@@ -5,7 +5,7 @@ process SCBTC_FILTERING {
     label 'process_single'
 
     container 'oandrefonseca/scrpackages:main'
-    publishDir "${params.project_name}/data/sample/${sample_id}", mode: 'copy'
+    publishDir "${params.outdir}/${params.project_name}/data/sample/${sample_id}", mode: 'copy'
 
     input:
         tuple val(sample_id), path(matrices), path(csv_metrics), path(meta_data)
