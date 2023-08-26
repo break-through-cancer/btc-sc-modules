@@ -3,7 +3,7 @@ process SCBTC_MERGE {
     label 'process_high'
 
     container "oandrefonseca/scrpackages:main"
-    publishDir "${params.outdir}", mode: 'copy'
+    publishDir "${params.outdir}/${params.project_name}", mode: 'copy'
 
     input:
         path(ch_qc_approved)
