@@ -1,4 +1,5 @@
 process SCBTC_MERGE {
+    debug true
     tag "Merging post-qc samples"
     label 'process_high'
 
@@ -16,6 +17,8 @@ process SCBTC_MERGE {
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
+        println $workflow.workDir
+
         """
         #!/usr/bin/env Rscript
 
