@@ -17,8 +17,8 @@ process SCBTC_MERGE {
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
-        println $workflow.workDir
-
+        println \$PWD
+        
         """
         #!/usr/bin/env Rscript
 
