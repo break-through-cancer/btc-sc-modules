@@ -1,5 +1,4 @@
 process SCBTC_MERGE {
-    debug true
     tag "Merging post-qc samples"
     label 'process_high'
 
@@ -11,14 +10,16 @@ process SCBTC_MERGE {
         path(merge_script)
 
     output:
+        path("output")
         path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
         path("${params.project_name}_merged_report.html")
         path("figures/merge")
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
-        println \$PWD
-        
+        """
+            echo $PWD > output
+        """
         """
         #!/usr/bin/env Rscript
 
