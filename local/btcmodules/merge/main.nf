@@ -10,16 +10,13 @@ process SCBTC_MERGE {
         path(merge_script)
 
     output:
-        path("output")
         path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
         path("${params.project_name}_merged_report.html")
         path("figures/merge")
 
     script:
         def n_memory = task.memory.toString().replaceAll(/[^0-9]/, '') as int
-        """
-            echo $PWD > output
-        """
+        
         """
         #!/usr/bin/env Rscript
 
