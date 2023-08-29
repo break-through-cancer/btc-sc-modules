@@ -10,7 +10,7 @@ process SCBTC_MERGE {
         path(merge_script)
 
     output:
-        path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
+        //path("data/${params.project_name}_merged_object.RDS"), emit: project_rds
         path("${params.project_name}_merged_report.html")
         //path("figures/merge/*")
 
