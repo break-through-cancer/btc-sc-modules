@@ -2,7 +2,7 @@ process CELLRANGER_PERSAMPLE{
     time '96h'
     cpus 16
     memory '12 GB'
-    label 'cellranger'
+    label 'process_high'
 
 
     input:
@@ -32,7 +32,7 @@ process CELLRANGER_PERSAMPLE{
         def cite_fastq_opt = cite_id != 'NODATA' ? " --cite_fastq ${cite_fastq}" : ''
         def cite_id_opt = cite_id != 'NODATA' ? " --cite_id ${cite_id}" : ''
         """
-            demultiplexing_utils.py  cellranger-multi-vdj \
+            cellranger_utils  cellranger-multi-vdj \
             --reference $reference \
             --vdj_reference $vdj_reference \
             --gex_fastq $gex_fastq \
